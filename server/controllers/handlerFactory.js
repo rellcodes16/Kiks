@@ -79,7 +79,7 @@ exports.getAll = Model => catchAsync(async (req, res, next) => {
     .limitFields()
     .paginate();
   const doc = await features.query;
-  console.log(doc)
+  // console.log(doc)
   // const doc = await features.query.explain();
 
   // SEND RESPONSE
