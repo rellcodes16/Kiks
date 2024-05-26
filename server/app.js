@@ -13,8 +13,12 @@ const userRouter = require('./routes/userRoutes')
 const reviewRouter = require('./routes/reviewRoutes')
 const cartRouter = require('./routes/cartRoutes')
 const paymentRouter = require('./routes/paymentRoutes')
+const favicon = require('serve-favicon');
 
 const app = express();
+
+// Serve favicon
+app.use(favicon(path.join(__dirname, 'favicon.ico')));
 
 //1. GLOBAL MIDDLEWARES
 
@@ -53,6 +57,11 @@ app.use((req, res, next) => {
 
     next();
 })
+
+// Define the root route
+app.get('/', (req, res) => {
+    res.status(200).send('Hello, World!');
+});
 
 
 //3. ROUTES
