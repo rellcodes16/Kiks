@@ -73,6 +73,8 @@ exports.getAll = Model => catchAsync(async (req, res, next) => {
   let filter = {}
   if (req.params.productId) filter = { product: req.params.productId }
 
+  const totalProducts = await Model.countDocuments(filter);
+
   const features = new APIFeatures(Model.find(filter), req.query)
     .filter()
     .sort()
@@ -86,6 +88,7 @@ exports.getAll = Model => catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     results: doc.length,
+    totalCount: totalProducts,
     data: {
       data: doc
     }
