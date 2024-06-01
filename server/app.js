@@ -7,6 +7,7 @@ const xss = require('xss-clean')
 const hpp = require('hpp')
 const path = require('path');
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
 
 const AppError = require('./utils/apiError')
 const globalErrorHandler = require('./controllers/errorController')
@@ -27,8 +28,15 @@ app.use(favicon(path.join(__dirname, 'favicon.ico')));
 //Set security HTTP headers
 app.use(helmet())
 
+app.use(cookieParser());
+
+const corsOptions = {
+    origin: 'http://localhost:5173',
+    credentials: true, 
+};
+
 // Enable CORS for all routes
-app.use(cors());
+app.use(cors(corsOptions));
 
 //Development logging
 if(!process.env.NODE_ENV === 'development'){
