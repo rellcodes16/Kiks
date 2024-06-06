@@ -153,6 +153,9 @@ exports.login = catchAsync(async (req, res, next) => {
 // })
 exports.protect = catchAsync(async (req, res, next) => {
     let token;
+    console.log('Headers:', req.headers);
+    console.log('Cookies:', req.cookies);
+
     // 1) Get token from header or cookies
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         token = req.headers.authorization.split(' ')[1];
@@ -160,12 +163,20 @@ exports.protect = catchAsync(async (req, res, next) => {
         token = req.cookies.jwt;
     }
 
+    console.log('Token:', token);
+
     if (!token) {
         return next(new AppError('You are not logged in. Please log in to get access', 401));
     }
 
     // 2) Verify token
-    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    let decoded;
+    try {
+        decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    } catch (err) {
+        return next(new AppError('Invalid token. Please log in again.', 401));
+    }
+    console.log('Decoded:', decoded);
 
     // 3) Check if user still exists
     const currentUser = await User.findById(decoded.id);
@@ -182,6 +193,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.user = currentUser;
     next();
 });
+
 
 
 
