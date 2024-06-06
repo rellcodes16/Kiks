@@ -71,6 +71,11 @@ app.use((req, res, next) => {
     next();
 })
 
+app.use((req, res, next) => {
+    console.log('Cookies: ', req.cookies);
+    next();
+});
+
 // Define the root route
 app.get('/', (req, res) => {
     res.status(200).send('Hello, World!');

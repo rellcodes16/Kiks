@@ -19,6 +19,7 @@ const signToken = id => {
     })
 }
 
+
 const createSendToken = (user, statusCode, res) => {
     const token = signToken(user._id)
 
@@ -155,8 +156,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     // 1) Get token from header or cookies
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         token = req.headers.authorization.split(' ')[1];
-    } else if (req.cookies.access_token) {
-        token = req.cookies.access_token;
+    } else if (req.cookies.jwt) {
+        token = req.cookies.jwt;
     }
 
     if (!token) {
