@@ -117,39 +117,72 @@ exports.login = catchAsync(async (req, res, next) => {
     createSendToken(user, 200, res)
 })
 
+// exports.protect = catchAsync(async (req, res, next) => {
+//     let token;
+//     //1 ) Getting token and check if it's there
+//     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+//         token = req.headers.authorization.split(' ')[1];
+//     }
+//     // console.log(token)
+
+//     if (!token) {
+//         return next(new AppError('You are not logged in. Please log in to get access', 401))
+//     }
+//     //2) Verification token
+//     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
+//     console.log(decoded)
+
+//     //3) Check if user still exists
+//     const currentUser = await User.findById(decoded.id)
+
+//     if (!currentUser) {
+//         return next(new AppError('The user belonging to the token no longer exist', 401))
+//     }
+
+//     //4) Check if user change password after the token was issued
+//     // currentUser.changedPasswordAfter(decoded.iat)
+
+//     if (currentUser.changedPasswordAfter(decoded.iat)) {
+//         return next(new AppError('User recently changed password! Please log in again', 401))
+//     }
+
+//     //GRANT ACCESS TO PROTECTED ROUTE
+//     req.user = currentUser;
+//     next();
+// })
 exports.protect = catchAsync(async (req, res, next) => {
     let token;
-    //1 ) Getting token and check if it's there
+    // 1) Get token from header or cookies
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         token = req.headers.authorization.split(' ')[1];
+    } else if (req.cookies.access_token) {
+        token = req.cookies.access_token;
     }
-    // console.log(token)
 
     if (!token) {
-        return next(new AppError('You are not logged in. Please log in to get access', 401))
+        return next(new AppError('You are not logged in. Please log in to get access', 401));
     }
-    //2) Verification token
-    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
-    console.log(decoded)
 
-    //3) Check if user still exists
-    const currentUser = await User.findById(decoded.id)
+    // 2) Verify token
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
+    // 3) Check if user still exists
+    const currentUser = await User.findById(decoded.id);
     if (!currentUser) {
-        return next(new AppError('The user belonging to the token no longer exist', 401))
+        return next(new AppError('The user belonging to this token does not exist.', 401));
     }
 
-    //4) Check if user change password after the token was issued
-    // currentUser.changedPasswordAfter(decoded.iat)
-
+    // 4) Check if user changed password after the token was issued
     if (currentUser.changedPasswordAfter(decoded.iat)) {
-        return next(new AppError('User recently changed password! Please log in again', 401))
+        return next(new AppError('User recently changed password! Please log in again.', 401));
     }
 
-    //GRANT ACCESS TO PROTECTED ROUTE
+    // GRANT ACCESS TO PROTECTED ROUTE
     req.user = currentUser;
     next();
-})
+});
+
+
 
 exports.restrictTo = (...roles) => {
     return (req, res, next) => {
