@@ -5,8 +5,6 @@ const authController = require('../controllers/authController')
 
 const router = express.Router({ mergeParams: true });
 
-router.use(authController.protect)
-
 router
     .route('/')
     .get(reviewController.getAllReviews)
@@ -17,6 +15,7 @@ router
         reviewController.createReview
     )
 
+router.use(authController.protect)
 
 router
     .route('/:id')
