@@ -5,11 +5,11 @@ const sizeSchema = new mongoose.Schema({
     size: {
         type: String,
         required: true,
-        unique: true // Ensures each size is unique for a product
+        unique: true 
     },
     quantity: {
         type: Number,
-        default: 0 // Default quantity is 0
+        default: 0 
     },
     price: {
         type: Number,
