@@ -38,7 +38,8 @@ exports.createProduct = catchAsync(async (req, res, next) => {
         // Create the product using the imageUrls
         const newProduct = await Product.create({
           ...req.body,
-          coverImage: imageUrls.length > 0 ? imageUrls[0] : '', // Assuming the first image is the cover image
+          coverImage: imageUrls.length > 0 ? imageUrls[0] : '',
+          transparentImage: imageUrls.length > 0 ? imageUrls.length - 1 : '',
           images: imageUrls,
         });
 

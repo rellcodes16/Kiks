@@ -62,6 +62,9 @@ const productSchema = new mongoose.Schema(
             // required: [true, 'A product must have a cover image']
         },
         // Other images in the description
+        transparentImage: {
+            type: String,
+        },
         images: [String],
         // The timestamp for when the product was created
         createdAt: {
