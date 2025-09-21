@@ -30,6 +30,8 @@
     "paystack": "^2.0.1",
     "serve-favicon": "^2.5.0",
     "slugify": "^1.6.6",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "validator": "^13.12.0",
     "xss-clean": "^0.1.4"
   },

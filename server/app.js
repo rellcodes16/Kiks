@@ -8,6 +8,8 @@ const hpp = require('hpp')
 const path = require('path');
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./docs/swaggerConfig");
 
 const AppError = require('./utils/apiError')
 const globalErrorHandler = require('./controllers/errorController')
@@ -75,6 +77,11 @@ app.use((req, res, next) => {
     console.log('Cookies: ', req.cookies);
     next();
 });
+
+
+// Swagger docs route
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 
 // Define the root route
 app.get('/', (req, res) => {

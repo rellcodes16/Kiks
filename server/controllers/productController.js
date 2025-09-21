@@ -3,10 +3,10 @@ const catchAsync = require('../utils/catchAsync')
 const factory = require('./handlerFactory')
 const { promisify } = require('util')
 const uploadMiddleWare = require('../multer')
-const cloudinary = require('../cloudinary');
-const fs = require('fs');
-const util = require('util');
-const unlink = util.promisify(fs.unlink);
+const cloudinary = require('../cloudinary')
+const fs = require('fs')
+const util = require('util')
+const unlink = util.promisify(fs.unlink)
 const AppError = require('../utils/apiError')
 const uploadMultiple = require('../multerMultiple')
 
@@ -57,7 +57,6 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     }
   });
 });
-
 
 // exports.createProduct = factory.createOne(Product)
 
@@ -127,7 +126,7 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
       });
     } catch (error) {
       console.error(error.message);
-      return next(new AppError(error.message, 500)); // Return internal server error if something goes wrong
+      return next(new AppError(error.message, 500)); 
     }
   });
 });
